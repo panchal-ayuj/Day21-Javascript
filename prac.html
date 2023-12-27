@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous" />
+    <title>Student Details</title>
+</head>
+
+<body>
+    <div class="container mt-4">
+        <h1 class="mb-4">Student Details</h1>
+
+        <form id="studentForm">
+            <div class="mb-3">
+                <label for="firstName" class="form-label">First Name:</label>
+                <input type="text" id="firstName" name="firstName" class="form-control" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="lastName" class="form-label">Last Name:</label>
+                <input type="text" id="lastName" name="lastName" class="form-control" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="age" class="form-label">Age:</label>
+                <input type="number" id="age" name="age" class="form-control" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="gender" class="form-label">Gender:</label>
+                <select id="gender" name="gender" class="form-select">
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label for="rollno" class="form-label">Roll Number:</label>
+                <input type="number" id="rollno" name="rollno" class="form-control" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="dob" class="form-label">Date of Birth (DD/MM/YYYY):</label>
+                <input type="date" id="dob" name="dob" class="form-control" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="hobbies" class="form-label">Hobbies:</label>
+                <input id="hobbies" type="text" name="hobbies" class="form-control">
+            </div>
+
+            <div class="mb-3">
+                <label for="mobileDevice" class="form-label">Choose a Mobile Device:</label>
+                <select id="mobileDevice" name="mobileDevice" class="form-select">
+                    <option value="iOS">iOS</option>
+                    <option value="Android">Android</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+
+            <button type="button" onclick="submitForm()" class="btn btn-primary">Submit</button>
+        </form>
+
+        <div class="mt-4">
+            <label for="getRollNo" class="form-label">Enter Roll Number to Get Details:</label>
+            <div class="input-group">
+                <input type="text" id="getRollNo" class="form-control">
+                <button onclick="getStudentDetails()" class="btn btn-outline-secondary">Get</button>
+            </div>
+        </div>
+
+        <div class="mt-3">
+            <button onclick="viewStudentDetails()" class="btn btn-success">View Student details</button>
+        </div>
+        <br>
+
+
+        <!-- Commented out the edit section for better layout in this response -->
+        <!--
+        <div class="mt-3">
+            <label for="editRollNo" class="form-label">Enter Roll Number to Edit Details:</label>
+            <div class="input-group">
+                <input type="text" id="editRollNo" class="form-control">
+                <button onclick="editStudentDetails()" class="btn btn-warning">Edit Details</button>
+            </div>
+        </div>
+        -->
+    </div>
+
+    <script>
+        // Array to store student objects
+        const students = [
+            { firstName: 'John', lastName: 'Doe', age: 20, gender: 'Male', rollno: '001', dob: '01-01-2000', hobbies: ['Reading', 'Sports'], mobileDevice: 'iOS' },
+        ];
+
+        // Function to get student details by roll number
+        function getStudentDetails() {
+            var rollNoInput = document.getElementById("getRollNo").value;
+            const student = students.find(s => s.rollno === rollNoInput);
+
+            if (student) {
+                console.log('Student Details:');
+                console.log('----------------');
+                console.log('First Name:', student.firstname);
+                console.log('Last Name:', student.lastname);
+                console.log('Age:', student.age);
+                console.log('Gender:', student.gender);
+                console.log('Roll Number:', student.rollno);
+                console.log('Date of Birth:', student.dob);
+                console.log('Hobbies:', student.hobbies.join(', '));
+                console.log('Mobile Device:', student.mobileDevice);
+            } else {
+                console.log('Student with Roll Number ' + rollNumberInput + ' not found.');
+            }
+        }
+
+        // Adding hobbies field with user input
+
+        function submitForm() {
+            const form = document.getElementById('studentForm');
+            const formData = new FormData(form);
+
+            // Convert FormData to JSON
+            const newStudent = {};
+            formData.forEach((value, key) => {
+                if (key == "hobbies") {
+                    const hobbiesArray = value.split(',').map(hobby => hobby.trim());
+                    newStudent[key] = hobbiesArray;
+                } else if (key == "dob") {
+                    const dobParts = value.split('-');
+                    const formattedDOB = dobParts[2] + '-' + dobParts[1] + '-' + dobParts[0];
+                    newStudent[key] = formattedDOB;
+                } else {
+                    newStudent[key] = value;
+                }
+            });
+
+            const existingStudent = students.find(student => student.rollno === newStudent.rollno);
+
+            if (existingStudent) {
+                console.log('Student with Roll Number ' + newStudent.rollno + ' already exists.');
+            } else {
+                // Log the JSON object to the console
+                console.log('Submitted Form Data:', newStudent);
+
+                // Adding the new student to the array
+                students.push(newStudent);
+
+                // Displaying the array in the console
+                console.log('Updated Students Array:', students);
+            }
+        }
+
+        function viewStudentDetails() {
+            const container = document.querySelector('.container');
+
+            const previousTable = container.querySelector('table');
+            if (previousTable) {
+                previousTable.remove();
+            }
+
+            const table = document.createElement('table');
+            table.classList.add('table', 'table-bordered', 'table-striped'); // Added Bootstrap table styles
+
+            // Create table header
+            const headerRow = document.createElement('tr');
+            const headers = ['First Name', 'Last Name', 'Age', 'Gender', 'Roll Number', 'Date of Birth', 'Hobbies', 'Mobile Device'];
+            headers.forEach(headerText => {
+                const th = document.createElement('th');
+                th.classList.add('text-center'); // Center-align table headers
+                th.appendChild(document.createTextNode(headerText));
+                headerRow.appendChild(th);
+            });
+            table.appendChild(headerRow);
+
+            // Create table body with student data
+            students.forEach(student => {
+                const row = document.createElement('tr');
+                Object.values(student).forEach(value => {
+                    const cell = document.createElement('td');
+                    cell.classList.add('text-center'); // Center-align table cells
+                    if (Array.isArray(value)) {
+                        cell.appendChild(document.createTextNode(value.join(', ')));
+                    } else {
+                        cell.appendChild(document.createTextNode(value));
+                    }
+                    row.appendChild(cell);
+                });
+
+                const editCell = document.createElement('td');
+                const editButton = document.createElement('button');
+                editButton.innerText = 'Edit';
+                editButton.classList.add('btn', 'btn-warning', 'btn-sm', 'mx-1'); // Added Bootstrap button styles
+                editButton.addEventListener('click', function () {
+                    editStudentDetails(student.rollno);
+                });
+                editCell.appendChild(editButton);
+                row.appendChild(editCell);
+                table.appendChild(row);
+            });
+
+            // Append the table to the container
+            container.appendChild(table);
+        }
+
+
+        function editStudentDetails(rollNoToEdit) {
+            const studentToEdit = students.find(student => student.rollno === rollNoToEdit);
+
+            if (studentToEdit) {
+                // Populate the form fields with existing student details
+                document.getElementById("firstName").value = studentToEdit.firstName;
+                document.getElementById("lastName").value = studentToEdit.lastName;
+                document.getElementById("age").value = studentToEdit.age;
+                document.getElementById("gender").value = studentToEdit.gender;
+                document.getElementById("rollno").value = studentToEdit.rollno;
+                const dobParts = studentToEdit.dob.split('-');
+                const formattedDOB = dobParts[2] + '-' + dobParts[1] + '-' + dobParts[0];
+                document.getElementById("dob").value = formattedDOB;
+                document.getElementById("hobbies").value = studentToEdit.hobbies.join(', ');
+                document.getElementById("mobileDevice").value = studentToEdit.mobileDevice;
+
+                // Disable the "Submit" button during editing
+                document.querySelector('button[type="button"]').setAttribute("disabled", "disabled");
+
+                // Create and append the "Update" button with Bootstrap styling
+                const updateButton = document.createElement('button');
+                updateButton.innerText = 'Update';
+                updateButton.classList.add('btn', 'btn-success', 'mx-1'); // Added Bootstrap button styles
+                updateButton.addEventListener('click', function () {
+                    // Call the updateStudentDetails function to update the details
+                    updateStudentDetails();
+                    // Enable the "Submit" button after editing
+                    document.querySelector('button[type="button"]').removeAttribute("disabled");
+                    // Remove the "Update" button
+                    updateButton.remove();
+                });
+                // Append the "Update" button to the container
+                document.querySelector('.container').appendChild(updateButton);
+            } else {
+                console.log('Student with Roll Number ' + rollNoToEdit + ' not found.');
+            }
+        }
+
+
+
+        function updateStudentDetails() {
+            // Fetch the updated details from the form
+            const dobParts = document.getElementById("dob").value.split('-');
+            const formattedDOB = dobParts[2] + '-' + dobParts[1] + '-' + dobParts[0];
+            const updatedStudent = {
+                firstName: document.getElementById("firstName").value,
+                lastName: document.getElementById("lastName").value,
+                age: document.getElementById("age").value,
+                gender: document.getElementById("gender").value,
+                rollno: document.getElementById("rollno").value,
+                dob: formattedDOB,
+                hobbies: document.getElementById("hobbies").value.split(',').map(hobby => hobby.trim()),
+                mobileDevice: document.getElementById("mobileDevice").value,
+            };
+
+            // Find the index of the student in the array
+            const index = students.findIndex(student => student.rollno === updatedStudent.rollno);
+
+            if (index !== -1) {
+                // Update the student in the array
+                students[index] = updatedStudent;
+
+                // Log the updated array
+                console.log('Updated Students Array:', students);
+
+                // Enable the "Submit" button after editing
+                document.querySelector('button[type="button"]').removeAttribute("disabled");
+            } else {
+                console.log('Student with Roll Number ' + updatedStudent.rollno + ' not found.');
+            }
+
+            viewStudentDetails();
+        }
+    </script>
+</body>
+
+</html>

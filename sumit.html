@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Beautiful Form</title>
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+</head>
+<body>
+    <h1 style="text-align: center;">Student Form</h1>
+    <div class="container mt-4" style="display: flex; align-items: center; justify-content: center;">
+        <div style="width: 70%;">
+      <form id="studentForm" >
+         <div class="form-group" >
+            <label for="firstName">First Name:</label>
+            <input type="text" class="form-control" id="firstName" name="firstName" required>
+          </div>
+          <div class="form-group">
+            <label for="lastName">Last Name:</label>
+            <input type="text" class="form-control" id="lastName" name="lastName" required>
+          </div>
+          <div class="form-group">
+            <label for="age">Age:</label>
+            <input type="number" class="form-control" id="age" name="age" required>
+          </div>
+          <!-- Radio buttons -->
+          <div class="form-group">
+            <p>Gender:</p>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" name="gender" value="male" required>
+              <label class="form-check-label">Male</label>
+            </div>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" name="gender" value="female" required>
+              <label class="form-check-label">Female</label>
+            </div>
+          </div>
+          <!-- Dropdown -->
+          <div class="form-group">
+            <label for="mobileDevice">Mobile Device:</label>
+            <select class="form-control" id="mobileDevice" name="mobileDevice" required>
+              <option value="" disabled selected>Select device</option>
+              <option value="iOS">iOS</option>
+              <option value="Android">Android</option>
+            </select>
+          </div>
+          <!-- Hobbies -->
+          <div class="form-group">
+            <label for="hobbies">Hobbies (comma-separated):</label>
+            <input type="text" class="form-control" id="hobbies" name="hobbies" required>
+          </div>
+    <!-- ... (previous form elements) ... -->
+    <!-- Roll number -->
+    <div class="form-group">
+      <label for="rollNo">Roll Number:</label>
+      <input type="text" class="form-control" id="rollNo" name="rollNo" required>
+      <small id="rollNoError" class="text-danger"></small>
+    </div>
+          <!-- Date Button -->
+          <div class="form-group">
+            <label for="Date">Date of Birth:</label>
+            <input type="date" class="form-control" id="birth" name="dateOfBirth" min="1950-01-01" max="2030-12-31">
+          </div>
+    <!-- Date Button -->
+    <!-- ... (previous form elements) ... -->
+    <!-- Submit button -->
+    <button type="button" class="btn btn-primary" onclick="validateAndSubmit()">Submit</button>
+  </form>
+  <!-- Display student details -->
+  <div class="mt-4">
+    <h2>Student Details</h2>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Roll Number</th>
+          <th>First Name</th>
+          <th>Last Name</th>
+          <th>Age</th>
+          <th>Gender</th>
+          <th>Mobile Device</th>
+          <th>Hobbies</th>
+          <th>Date of Birth</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody id="studentDetailsBody">
+        <!-- Student details will be added dynamically here -->
+      </tbody>
+    </table>
+  </div>
+</div>
+</div>
+<!-- Bootstrap JS (optional, but required for some features) -->
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+<!-- Bootstrap Modal -->
+<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="editModalLabel">Edit Student Details</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="editStudentForm">
+          <div class="form-group">
+            <label for="editRollNo">Roll Number:</label>
+            <input type="text" class="form-control" id="editRollNo" name="editRollNo" readonly>
+          </div>
+          <div class="form-group">
+            <label for="editFirstName">First Name:</label>
+            <input type="text" class="form-control" id="editFirstName" name="editFirstName" required>
+          </div>
+          <div class="form-group">
+            <label for="editLastName">Last Name:</label>
+            <input type="text" class="form-control" id="editLastName" name="editLastName" required>
+          </div>
+          <div class="form-group">
+            <label for="editAge">Age:</label>
+            <input type="number" class="form-control" id="editAge" name="editAge" required>
+          </div>
+          <div class="form-group">
+            <p>Gender:</p>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" name="editGender" id="editMale" value="male" required>
+              <label class="form-check-label" for="editMale">Male</label>
+            </div>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" name="editGender" id="editFemale" value="female" required>
+              <label class="form-check-label" for="editFemale">Female</label>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="editMobileDevice">Mobile Device:</label>
+            <select class="form-control" id="editMobileDevice" name="editMobileDevice" required>
+              <option value="" disabled selected>Select device</option>
+              <option value="iOS">iOS</option>
+              <option value="Android">Android</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="editHobbies">Hobbies (comma-separated):</label>
+            <input type="text" class="form-control" id="editHobbies" name="editHobbies" required>
+          </div>
+          <div class="form-group">
+            <label for="editBirth">Date of Birth:</label>
+            <input type="date" class="form-control" id="editBirth" name="editBirth" min="1950-01-01" max="2030-12-31" />
+          </div>
+          <button type="button" class="btn btn-primary" onclick="saveChanges()">Save Changes</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  var students = []; // Array to store student details
+  function validateAndSubmit() {
+    var rollNoInput = document.getElementById('rollNo');
+    var rollNoError = document.getElementById('rollNoError');
+    var enteredRollNo = rollNoInput.value.trim();
+    // Perform a simple check for uniqueness (front-end only, not secure)
+    if (isRollNoUnique(enteredRollNo)) {
+      // If roll number is unique, you can proceed with form submission or other actions
+      // For now, I'll just log a message to the console
+      console.log('Roll number is unique. Proceed with submission.');
+      // Add student details to the array and update the table
+      addStudentDetails();
+    } else {
+      // If roll number is not unique, display an error message
+      rollNoError.textContent = 'Roll number is not unique.';
+    }
+  }
+  function isRollNoUnique(rollNo) {
+    // Check if the entered roll number is not in the existing array
+    return !students.some(student => student.rollNo === rollNo);
+  }
+
+  function addStudentDetails() {
+    var tableBody = document.getElementById('studentDetailsBody');
+    // Get values from form inputs
+    var rollNo = document.getElementById('rollNo').value.trim();
+    var firstName = document.getElementById('firstName').value.trim();
+    var lastName = document.getElementById('lastName').value.trim();
+    var age = document.getElementById('age').value.trim();
+    var gender = document.querySelector('input[name="gender"]:checked').value;
+    var mobileDevice = document.getElementById('mobileDevice').value.trim();
+    var hobbies = document.getElementById('hobbies').value.trim();
+    var dateOfBirth = document.getElementById('birth').value;
+    // Add student details to the array
+    students.push({
+      rollNo: rollNo,
+      firstName: firstName,
+      lastName: lastName,
+      age: age,
+      gender: gender,
+      mobileDevice: mobileDevice,
+      hobbies: hobbies,
+      dateOfBirth: dateOfBirth
+    });
+    // Create a new row for the table
+    var newRow = tableBody.insertRow(tableBody.rows.length);
+    // Add data to the row
+    newRow.insertCell(0).textContent = rollNo;
+    newRow.insertCell(1).textContent = firstName;
+    newRow.insertCell(2).textContent = lastName;
+    newRow.insertCell(3).textContent = age;
+    newRow.insertCell(4).textContent = gender;
+    newRow.insertCell(5).textContent = mobileDevice;
+    newRow.insertCell(6).textContent = hobbies;
+    newRow.insertCell(7).textContent = dateOfBirth;
+    // Add "Edit" button to the row
+    var editButton = document.createElement('button');
+    editButton.textContent = 'Edit';
+    editButton.className = 'btn btn-warning btn-sm';
+    editButton.onclick = function () {
+      openEditModal(rollNo);
+    };
+    newRow.insertCell(8).appendChild(editButton);
+    // Clear the roll number input and error message
+    document.getElementById('rollNo').value = '';
+    document.getElementById('rollNoError').textContent = '';
+  }
+  function openEditModal(rollNo) {
+    // Find the student in the array by roll number
+    var student = students.find(s => s.rollNo === rollNo);
+    // Set the initial values in the edit modal
+    document.getElementById('editRollNo').value = student.rollNo;
+    document.getElementById('editFirstName').value = student.firstName;
+    document.getElementById('editLastName').value = student.lastName;
+    document.getElementById('editAge').value = student.age;
+    document.querySelector(`input[name="editGender"][value="${student.gender}"]`).checked = true;
+    document.getElementById('editMobileDevice').value = student.mobileDevice;
+    document.getElementById('editHobbies').value = student.hobbies;
+    document.getElementById('editBirth').value = student.dateOfBirth;
+    // Show the edit modal
+    $('#editModal').modal('show');
+  }
+  function saveChanges() {
+    // Get values from the edit modal inputs
+    var rollNo = document.getElementById('editRollNo').value.trim();
+    var firstName = document.getElementById('editFirstName').value.trim();
+    var lastName = document.getElementById('editLastName').value.trim();
+    var age = document.getElementById('editAge').value.trim();
+    var gender = document.querySelector('input[name="editGender"]:checked').value;
+    var mobileDevice = document.getElementById('editMobileDevice').value.trim();
+    var hobbies = document.getElementById('editHobbies').value.trim();
+    var dateOfBirth = document.getElementById('editBirth').value;
+    // Find the index of the student in the array
+    var index = students.findIndex(s => s.rollNo === rollNo);
+    // Update the student details in the array
+    students[index] = {
+      rollNo: rollNo,
+      firstName: firstName,
+      lastName: lastName,
+      age: age,
+      gender: gender,
+      mobileDevice: mobileDevice,
+      hobbies: hobbies,
+      dateOfBirth: dateOfBirth
+    };
+    // Update the table row with the edited details
+    var tableRow = document.querySelector(`#studentDetailsBody tr:nth-child(${index + 1})`);
+    tableRow.cells[0].textContent = rollNo;
+    tableRow.cells[1].textContent = firstName;
+    tableRow.cells[2].textContent = lastName;
+    tableRow.cells[3].textContent = age;
+    tableRow.cells[4].textContent = gender;
+    tableRow.cells[5].textContent = mobileDevice;
+    tableRow.cells[6].textContent = hobbies;
+    tableRow.cells[7].textContent = dateOfBirth;
+    // Hide the edit modal
+    $('#editModal').modal('hide');
+  }
+</script>
+</body>
+</html>
